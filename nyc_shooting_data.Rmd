@@ -14,6 +14,28 @@ library(jsonlite)
 shootings_full_url <- download.file("https://data.cityofnewyork.us/api/views/833y-fsy8/rows.csv?accessType=DOWNLOAD&bom=true&format=true",destfile = "shootings.csv")
 
 shootings_full_url <- read_csv("shootings.csv")
+
+shootings_full_url$OCCUR_DATE <- as.Date(shootings_full_url$OCCUR_DATE, format = "%m/%d/%y")
+
+shootings_full_url$OCCUR_DT <- make_datetime(year=year(as.Date(shootings_full_url$OCCUR_DATE)),month = month(as.Date(shootings_full_url$OCCUR_DATE)),
+      day = day(as.Date(shootings_full_url$OCCUR_DATE)),                                        hour=hour(shootings_full_url$OCCUR_TIME),                   min=minute(shootings_full_url$OCCUR_TIME),sec = second(shootings_full_url$OCCUR_TIME))
+
+shootings_full_url$day <- day(shootings_full_url$OCCUR_DT)
+
+shootings_summarized <- shootings_full_url %>% 
+  group_by(OCCUR_DATE) %>% 
+  summarize(shootings_per_day = n())
+
+
+```
+
+```{r visualizations}
+ggplot(data=shootings_summarized,         
+                   aes(x = OCCUR_DATE,
+                       y = shootings_per_day))+
+                   geom_point() +                                         #adding lines to plot
+                   theme_classic() + 
+                   scale_y_continuous(name = "Shootings per day") 
 ```
 
 
