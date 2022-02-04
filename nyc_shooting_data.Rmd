@@ -1,0 +1,19 @@
+---
+title: "nyc_shooting_data"
+author: "Drew Walker"
+date: "2/4/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(lubridate)
+library(jsonlite)
+
+shootings_full_url <- download.file("https://data.cityofnewyork.us/api/views/833y-fsy8/rows.csv?accessType=DOWNLOAD&bom=true&format=true",destfile = "shootings.csv")
+
+shootings_full_url <- read_csv("shootings.csv")
+```
+
+
